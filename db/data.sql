@@ -1,6 +1,6 @@
 USE pharmacy;
 
-INSERT INTO status (status_name) VALUES
+INSERT INTO role (role_name) VALUES
 ('Client'), 
 ('Admin');  
 
@@ -14,7 +14,7 @@ VALUES (
 
 INSERT INTO email_verification_tokens (user_id, token, expires_at)
 VALUES (
-    1,  -- ID користувача 
-    'd03c6e2b-9f1b-4b5f-93c5-5e27a1e3f2da',  -- токен
+    1,   
+    'd03c6e2b-9f1b-4b5f-93c5-5e27a1e3f2da', 
     DATE_ADD(NOW(), INTERVAL 2 MINUTE)
 );

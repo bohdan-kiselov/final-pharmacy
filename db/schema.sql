@@ -1,8 +1,8 @@
 USE pharmacy;
 
-CREATE TABLE status (
+CREATE TABLE role (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    status_name VARCHAR(20) NOT NULL UNIQUE
+    role_name VARCHAR(20) NOT NULL UNIQUE
 );
 
 CREATE TABLE users (
@@ -13,8 +13,8 @@ CREATE TABLE users (
     phone_number VARCHAR(13) NOT NULL UNIQUE,
     is_verified BOOLEAN DEFAULT FALSE,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    status_id INT DEFAULT 1,
-    FOREIGN KEY (status_id) REFERENCES status(id)
+    role_id INT DEFAULT 1,
+    FOREIGN KEY (role_id) REFERENCES role(id)
 );
 
 CREATE TABLE email_verification_tokens (
