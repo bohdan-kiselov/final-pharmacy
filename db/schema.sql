@@ -24,3 +24,30 @@ CREATE TABLE email_verification_tokens (
     used BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+CREATE TABLE catalog (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    catalog_name VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE company (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    company_name VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(254) NOT NULL UNIQUE,
+    country VARCHAR(50)
+);
+
+CREATE TABLE product (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    price DECIMAL(10,2) NOT NULL,            
+    purchase_price DECIMAL(10,2) NOT NULL,   
+    purchase_date DATE NOT NULL,             
+    quantity INT DEFAULT 0,                  
+    image_url VARCHAR(255),                  
+    company_id INT NOT NULL,                 
+    catalog_id INT NOT NULL,                 
+    FOREIGN KEY (company_id) REFERENCES company(id),
+    FOREIGN KEY (catalog_id) REFERENCES catalog(id)
+);
