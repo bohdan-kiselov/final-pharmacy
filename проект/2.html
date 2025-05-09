@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pharmacy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: white;
+    }
+
+    .container {
+      position: relative;
+      width: 1440px;
+      height: 900px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .section {
+      position: absolute;
+      width: 690px;
+      height: 483px;
+      background: #DBDBDB;
+      padding: 20px;
+    }
+
+    .left-section {
+      left: 20px;
+      top: 106px;
+    }
+
+    .right-section {
+      left: 727px;
+      top: 106px;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-family: 'Irish Grover';
+    }
+
+    .section-subtitle {
+      font-size: 16px;
+      font-family: 'Irish Grover';
+      margin-top: 10px;
+    }
+
+    .section-description {
+      margin-top: 30px;
+      font-size: 20px;
+      font-family: 'Irish Grover';
+      text-align: justify;
+    }
+
+    .button {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      width: 329px;
+      height: 66px;
+      background: #9E9E9E;
+      border-radius: 37px;
+      border: 1px solid black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-family: 'Irish Grover';
+      cursor: pointer;
+      user-select: none;
+      transition: opacity 0.3s;
+    }
+
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 78px;
+      font-size: 40px;
+      font-family: 'Irish Grover';
+    }
+
+    .input-field {
+      margin-top: 20px;
+    }
+
+    .input-field label {
+      font-size: 20px;
+    }
+
+    .input-field input {
+      width: 500px;
+      height: 41px;
+      background: #E9E9E9;
+      border-radius: 59px;
+      border: 1px solid black;
+      padding: 10px;
+      font-size: 18px;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .banner-top, .banner-bottom {
+      position: absolute;
+      object-fit: cover;
+    }
+
+    .banner-top {
+      top: 0;
+      left: 270px;
+      width: 1150px;
+      height: 75px;
+    }
+
+    .banner-bottom {
+      top: 742px;
+      left: 20px;
+      width: 1400px;
+      height: 158px;
+    }
+  </style>
+</head>
+<body><!-- Модальне вікно -->
+    <!-- Модальне вікно -->
+<div id="forgot-modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+width: 586px; height: 452px; background: white; box-shadow: 0 0 20px rgba(0,0,0,0.3); z-index: 1000; overflow: hidden; border-radius: 12px;">
+
+<div style="left: 168px; top: 50px; position: absolute; color: black; font-size: 24px; font-family: Inter; font-weight: 600;">
+  Відновлення паролю
+</div>
+
+<!-- Мітка -->
+<div style="width: 299px; left: 53px; top: 157px; position: absolute; color: black; font-size: 24px;
+  font-family: Inter; font-weight: 400;">
+  Пошта*
+</div>
+
+<!-- Поле вводу -->
+<div style="width: 500px; height: 41px; left: 43px; top: 192px; position: absolute; background: #E9E9E9;
+  border-radius: 59px; border: 1px black solid;">
+  <input type="email" placeholder="Введіть вашу пошту" style="
+    width: calc(100% - 40px); /* Виправлено: компенсуємо padding */
+    height: 100%;
+    border: none;
+    border-radius: 59px;
+    padding: 0 20px;
+    font-size: 18px;
+    background: transparent;
+  " />
+</div>
+
+<!-- Кнопка -->
+<div id="send-btn" style="width: 329px; height: 66.29px; left: 250px; top: 372px; position: absolute;
+  background: #9E9E9E; border-radius: 37px; border: 1px black solid; display: flex; align-items: center; justify-content: center;
+  font-size: 32px; font-family: 'Irish Grover'; cursor: pointer;">
+  Відправити
+</div>
+
+<!-- Кнопка закриття -->
+<div onclick="closeModal()" style="position: absolute; top: 10px; right: 20px; font-size: 24px;
+  cursor: pointer;">✕</div>
+</div>
+
+    
+
+  <div class="container">
+    <img class="banner-top" src="D:/проект/pixabay_lekarstvo_300677bf84ce84ff6d4130d32778d6d8_1200x675.jpg" alt="Top Banner">
+    <img class="banner-bottom" src="D:/проект/pixabay_lekarstvo_300677bf84ce84ff6d4130d32778d6d8_1200x675.jpg" alt="Bottom Banner">
+
+    <div class="logo">Pharmacy</div>
+
+    <!-- Реєстрація -->
+    <div class="section left-section">
+      <div class="section-title">Новий користувач</div>
+      <div class="section-subtitle">Реєстрація</div>
+      <div class="section-description">
+        Створення облікового запису допоможе робити наступні покупки швидше (не треба буде знову вводити адресу та контактну інформацію), бачити стан замовлення,  а також бачити замовлення, зроблені раніше. 
+
+      </div>
+
+      <div class="button" id="btn-continue">Продовжити</div>
+    </div>
+
+    <!-- Авторизація -->
+    <div class="section right-section">
+      <div class="section-title">Вже зареєстрований</div>
+      <div class="section-subtitle">Авторизація</div>
+
+      <div class="input-field">
+        <label>Пошта*</label><br />
+        <input type="email" id="login-email" />
+        <div class="error" id="error-login-email"></div>
+      </div>
+
+      <div class="input-field">
+        <label>Пароль*</label><br />
+        <input type="password" id="login-pass" />
+        <div class="error" id="error-login-pass"></div>
+      </div>
+
+      <div class="button" style="top: 347px; width: 205px;font-size: 24px;">Забули пароль</div>
+      <div class="button" style="left: 342px;" id="btn-login">Увійти</div>
+    </div>
+  </div>
+  
+
+  <script>
+    // Показати модальне вікно
+    document.querySelector('.button[style*="top: 347px"]').addEventListener('click', () => {
+      document.getElementById('forgot-modal').style.display = 'block';
+    });
+  
+    // Закриття вікна (для ✕)
+    function closeModal() {
+      document.getElementById('forgot-modal').style.display = 'none';
+    }
+  
+    // Натиснення на "Відправити"
+    document.getElementById('send-btn').addEventListener('click', () => {
+      alert('Інструкції надіслано на вашу пошту');
+      closeModal();
+    });
+  
+    function setError(id, msg) {
+      document.getElementById(id).textContent = msg;
+    }
+  
+    function validateLogin() {
+      const email = document.getElementById('login-email').value.trim();
+      const pass = document.getElementById('login-pass').value;
+      let valid = true;
+  
+      // Email validation
+      if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email)) {
+        setError('error-login-email', 'Введіть дійсну адресу Gmail');
+        valid = false;
+      } else {
+        setError('error-login-email', '');
+      }
+  
+      // Password validation
+      if (!/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/.test(pass)) {
+        setError('error-login-pass', 'Пароль має містити латинські літери та цифри (8-16 символів)');
+        valid = false;
+      } else {
+        setError('error-login-pass', '');
+      }
+  
+      return valid;
+    }
+  
+    document.getElementById('btn-login').addEventListener('click', () => {
+      if (validateLogin()) {
+        alert('Авторизація успішна');
+      }
+    });
+  
+    // Показати одразу повідомлення при фокусі на email
+    document.getElementById('login-email').addEventListener('focus', () => {
+      setError('error-login-email', 'Введіть дійсну адресу Gmail');
+    });
+  
+    // Показати одразу повідомлення при фокусі на пароль
+    document.getElementById('login-pass').addEventListener('focus', () => {
+      setError('error-login-pass', 'Пароль має містити латинські літери та цифри (8-16 символів)');
+    });
+  
+    // ⏩ Перехід до реєстрації при натисканні "Продовжити"
+    document.getElementById('btn-continue').addEventListener('click', () => {
+      window.location.href = 'index.html';  // <-- тут вкажи свою сторінку реєстрації
+    });
+  </script>
+  
+</body>
+</html>

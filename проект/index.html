@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pharmacy</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap');
+
+    .wrapper {
+      position: relative;
+      width: 1440px;
+      height: 900px;
+      background: white;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+    .logo-img {
+      position: absolute;
+      top: 74.2px;
+      left: 101px;
+      width: 74.53px;
+      height: 74.18px;
+      transform: rotate(180deg);
+      transform-origin: top left;
+    }
+
+    .header-img {
+      position: absolute;
+      top: 0;
+      left: 299px;
+      width: 1127px;
+      height: 84px;
+      object-fit: cover;
+    }
+
+    .footer-img {
+      position: absolute;
+      top: 805px;
+      left: 18px;
+      width: 1145px;
+      height: 95px;
+      object-fit: cover;
+    }
+
+    .btn-register {
+      position: absolute;
+      top: 805px;
+      left: 1208px;
+      width: 220px;
+      height: 87px;
+      background: #D9D9D9;
+      border-radius: 65px;
+      border: 1px solid black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-family: 'Inter', sans-serif;
+      cursor: not-allowed;
+    }
+
+    .title-main {
+      position: absolute;
+      top: 19.6px;
+      left: 76.3px;
+      font-family: 'Irish Grover', cursive;
+      font-size: 40px;
+    }
+
+    .title-form {
+      position: absolute;
+      top: 143px;
+      left: 107px;
+      font-size: 24px;
+      text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+
+    .form-group {
+      position: absolute;
+      left: 58px;
+      display: flex;
+      flex-direction: column;
+      width: 845px;
+      gap: 18px;
+      top: 200px;
+    }
+
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      font-size: 24px;
+    }
+
+    .form-row input {
+      height: 41.42px;
+      background: #E9E9E9;
+      border-radius: 59px;
+      border: 1px solid black;
+      padding-left: 15px;
+      font-size: 18px;
+    }
+
+    .form-note-required {
+      position: absolute;
+      top: 750px;
+      left: 160px;
+      color: red;
+      font-size: 16px;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 4px;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <img src="D:/проект/pixabay_lekarstvo_300677bf84ce84ff6d4130d32778d6d8_1200x675.jpg" class="header-img" alt="Заголовок">
+    <img src="D:/проект/pixabay_lekarstvo_300677bf84ce84ff6d4130d32778d6d8_1200x675.jpg" class="footer-img" alt="Підвал">
+    <img src="D:/проект/лого.png" class="logo-img" alt="Лого">
+
+    <div class="title-main">Pharmacy</div>
+    <div class="title-form">Реєстрація</div>
+
+    <div class="form-group">
+      <div class="form-row">
+        <label for="login">Login*</label>
+        <input id="login" type="text" placeholder="Введіть логін">
+        <div class="error" id="error-login"></div>
+      </div>
+      <div class="form-row">
+        <label for="phone">Телефон*</label>
+        <input id="phone" type="text" placeholder="Введіть номер телефону">
+        <div class="error" id="error-phone"></div>
+      </div>
+      <div class="form-row">
+        <label for="email">Почта*</label>
+        <input id="email" type="text" placeholder="Введіть email">
+        <div class="error" id="error-email"></div>
+      </div>
+      <div class="form-row">
+        <label for="pass">Пароль*</label>
+        <input id="pass" type="password" placeholder="Введіть пароль">
+        <div class="error" id="error-pass"></div>
+      </div>
+      <div class="form-row">
+        <label for="confirm-pass">Підтвердження паролю*</label>
+        <input id="confirm-pass" type="password" placeholder="Підтвердження паролю">
+        <div class="error" id="error-confirm"></div>
+      </div>
+    </div>
+
+    <div class="form-note-required">Всі поля з позначкою “*” повинні бути заповненні</div>
+
+    <div id="btn-register" class="btn-register" disabled>Зареєструватись</div>
+  </div>
+
+  <script>
+    
+    function checkInputs() {
+      const login = document.getElementById('login').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const pass = document.getElementById('pass').value;
+      const confirmPass = document.getElementById('confirm-pass').value;
+
+      let valid = true;
+
+      if (login.length <  3 || login.length > 16) { 
+        showError('error-login', 'Логін має містити від 3 до 16');
+        valid = false;
+      } else {
+        showError('error-login', '');
+      }
+
+      if (!/^\+380\d{9}$/.test(phone)) {
+        showError('error-phone', 'Номер має починатися з +380 і містити 13 символів');
+        valid = false;
+      } else {
+        showError('error-phone', '');
+      }
+
+      if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email)) {
+        showError('error-email', 'Введіть дійсну адресу Gmail');
+        valid = false;
+      } else {
+        showError('error-email', '');
+      }
+
+      if (!/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/.test(pass)) {
+        showError('error-pass', 'Пароль має містити латинськи літери та цифри, від 8 до 16'); 
+        valid = false;
+      } else {
+        showError('error-pass', '');
+      }
+
+      if (pass !== confirmPass || confirmPass === '') {
+        showError('error-confirm', 'Паролі не збігаються');
+        valid = false;
+      } else {
+        showError('error-confirm', '');
+      }
+
+      if (login === phone || login === email || phone === email) {
+        showError('error-login', 'Логін має містити від 3 до 16');
+        valid = false;
+      }
+
+      const btn = document.getElementById('btn-register');
+      btn.disabled = !valid;
+      btn.style.cursor = valid ? 'pointer' : 'not-allowed';
+    }
+
+    function showError(id, message) {
+      document.getElementById(id).textContent = message;
+    }
+
+    ['login', 'phone', 'email', 'pass', 'confirm-pass'].forEach(id =>
+      document.getElementById(id).addEventListener('input', checkInputs)
+    );
+
+    document.getElementById('btn-register').addEventListener('click', () => {
+      const btn = document.getElementById('btn-register');
+      if (!btn.disabled) {
+        const width = 700;
+        const height = 500;
+        const left = (screen.width / 2) - (width / 2);
+        const top = (screen.height / 2) - (height / 2);
+        const newWindow = window.open('', '_blank', `width=${width},height=${height},left=${left},top=${top}`);
+
+        newWindow.document.write(`
+          <html>
+          <head>
+            <title>Успіх</title>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                height: 100vh;
+                background-color: #ffffff;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                position: relative;
+                text-align: center;
+              }
+              h2 {
+                font-weight: bold;
+                font-size: 24px;
+                margin-bottom: 16px;
+              }
+              p {
+              font-weight: bold;
+                font-size: 24px;
+                margin: 0;
+                
+              }
+              .footer {
+                position: absolute;
+                bottom: 20px;
+                right: 30px;
+                font-size: 18px;
+              }
+            </style>
+          </head>
+          <body>
+            <h2>Ви успішно зареєструвалися</h2>
+            <p>Вам на пошту відправлено підтвердження</p>
+            <div class="footer">З повагою, <strong>Pharmacy</strong></div>
+          </body>
+          </html>
+        `);
+      }
+    });
+  </script>
+
+</body>
+</html>
