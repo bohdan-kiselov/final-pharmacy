@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Особисті дані</title>
+  <style>
+    body {
+      margin: 0;
+      height: 75vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: white;
+      font-family: Inter, sans-serif;
+      overflow: hidden;
+    }
+
+    .form-section {
+      position: relative;
+      width: 1440px;
+      height: 900px;
+      background: white;
+    }
+
+    input {
+      position: absolute;
+      width: 431px;
+      height: 41px;
+      padding: 0 20px;
+      background: #E9E9E9;
+      border-radius: 59px;
+      border: 1px solid black;
+      font-size: 16px;
+      font-family: Inter, sans-serif;
+      outline: none;
+    }
+    .menu .logo {
+  position: absolute;
+  top: -30px;
+  left: 48px;
+  width: 200px; /* або будь-який потрібний розмір */
+  height: auto;
+}
+
+
+    .error {
+      position: absolute;
+      color: red;
+      font-size: 14px;
+    }
+
+    #login { top: 157px; left: 437px; }
+    #phone { top: 240px; left: 437px; }
+    #email { top: 323px; left: 437px; }
+
+    #error-login { top: 200px; left: 437px; }
+    #error-phone { top: 283px; left: 437px; }
+    #error-email { top: 366px; left: 437px; }
+
+    #btn-password {
+      width: 149px;
+      height: 41px;
+      left: 437px;
+      top: 382px;
+      position: absolute;
+      background: #9E9E9E;
+      border-radius: 37px;
+      border: 1px black solid;
+      font-size: 16px;
+      font-family: 'Irish Grover', cursive;
+      cursor: pointer;
+    }
+
+    #btn-register {
+      width: 250px;
+      height: 80px;
+      left: 868px;
+      top: 519px;
+      position: absolute;
+      background: #9E9E9E;
+      border-radius: 37px;
+      border: 1px black solid;
+      font-size: 24px;
+      font-family: 'Irish Grover', cursive;
+      cursor: not-allowed;
+      color: black;
+    }
+
+    .menu img {
+      width: 50px;
+      height: 44px;
+      position: absolute;
+    }
+
+    .menu a {
+      position: absolute;
+      font-size: 24px;
+      font-family: Inter, sans-serif;
+      color: black;
+      text-decoration: none;
+    }
+
+    .menu .user-icon { left: 44px; top: 40px; }
+    .menu .user-link { left: 94px; top: 52px; }
+    .menu .history-icon { left: 44px; top: 105px; }
+    .menu .history-link { left: 94px; top: 119px; }
+
+    #title {
+      left: 448px;
+      top: 37px;
+      position: absolute;
+      color: black;
+      font-size: 32px;
+      font-family: Inter, sans-serif;
+    }
+
+    .field-label {
+      position: absolute;
+      font-size: 24px;
+      font-family: Inter, sans-serif;
+      color: black;
+    }
+
+    #label-login { left: 437px; top: 127px; }
+    #label-phone { left: 437px; top: 210px; }
+    #label-email { left: 437px; top: 293px; }
+
+    #btn-email-edit {
+      position: absolute;
+      left: 840px;
+      top: 335px;
+      font-size: 16px;
+      font-family: Inter, sans-serif;
+      color: black;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 100vw;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 998;
+    }
+
+    #password-popup, #email-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 816px;
+      height: 420px; /* ЗБІЛЬШЕНА ВИСОТА */
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      z-index: 999;
+      padding: 20px;
+    }
+
+    #password-popup input,
+    #email-popup input {
+      position: absolute;
+      width: 431px;
+      background: #E9E9E9;
+      border-radius: 59px;
+      border: 1px solid black;
+      padding: 0 20px;
+      font-size: 16px;
+      height: 42px;
+    }
+
+    #pass-error, #email-error {
+      position: absolute;
+      color: red;
+      font-size: 14px;
+    }
+
+    #btn-save-pass, #btn-save-email {
+      width: 250px;
+      height: 80px;
+      position: absolute;
+      background: #9E9E9E;
+      border-radius: 37px;
+      border: 1px solid black;
+      font-family: 'Irish Grover';
+      font-size: 24px;
+      color: black;
+      cursor: not-allowed;
+    }
+
+    #btn-save-pass { left: 560px; top: 300px; } /* переміщено всередину */
+    #btn-save-email { left: 451px; top: 180px; }
+    #email-error { top: 130px; left: 192px; }
+  </style>
+</head>
+<body>
+  <div class="form-section">
+    <div id="title">Особисті дані</div>
+    <div class="field-label" id="label-login">Login*</div>
+    <div class="field-label" id="label-phone">Телефон*</div>
+    <div class="field-label" id="label-email">Почта*</div>
+
+    <input type="text" id="login">
+    <div class="error" id="error-login"></div>
+
+    <input type="text" id="phone">
+    <div class="error" id="error-phone"></div>
+
+    <input type="email" id="email" readonly>
+    <div class="error" id="error-email"></div>
+
+    <span id="btn-email-edit">Змінити</span>
+
+    <button id="btn-password">Змінити пароль</button>
+    <button id="btn-register" disabled>Зберегти</button>
+
+   <div class="menu">
+     <a href="index.html"> <!-- Заміни на потрібне посилання -->
+  <img src="D:/проект/лого1.png" alt="Логотип" class="logo" />
+  <img src="D:/проект/корист.png" alt="Користувач" class="user-icon" />
+  <a href="#" class="user-link">Користувач</a>
+  <img src="D:/проект/история.png" alt="Історія" class="history-icon" />
+  <a href="#" class="history-link">Історія</a>
+</div>
+
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Модальне вікно для пароля -->
+  <div id="password-popup">
+    <div style="width: 100%; height: 100%; position: relative;">
+      <div style="left: 192px; top: 30px; position: absolute; font-size: 24px;">Новий пароль*</div>
+      <input type="password" id="new-pass" style="left: 192px; top: 60px;">
+      <div id="pass-error" style="left: 192px; top: 105px;"></div>
+      <div style="left: 192px; top: 140px; position: absolute; font-size: 24px;">Повторіть пароль*</div>
+      <input type="password" id="confirm-pass" style="left: 192px; top: 170px;">
+      <button id="btn-save-pass" disabled>Зберегти</button>
+    </div>
+  </div>
+
+  <!-- Модальне вікно для зміни пошти -->
+  <div id="email-popup">
+    <div style="width: 100%; height: 100%; position: relative;">
+      <div style="left: 192px; top: 50px; position: absolute; font-size: 24px;">Нова пошта*</div>
+      <input type="email" id="new-email" style="left: 192px; top: 80px;">
+      <div id="email-error"></div>
+      <button id="btn-save-email" disabled>Зберегти</button>
+    </div>
+  </div>
+
+  <script>
+    const overlay = document.getElementById('overlay');
+
+    function showPopup(popupId) {
+      document.getElementById(popupId).style.display = 'block';
+      overlay.style.display = 'block';
+    }
+
+    function hidePopups() {
+      document.getElementById('password-popup').style.display = 'none';
+      document.getElementById('email-popup').style.display = 'none';
+      overlay.style.display = 'none';
+    }
+
+    function checkInputs() {
+      const login = document.getElementById('login').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const email = document.getElementById('email').value.trim();
+
+      let valid = true;
+
+      if (login.length < 3 || login.length > 16) {
+        showError('error-login', 'Логін має містити від 3 до 16 символів');
+        valid = false;
+      } else {
+        showError('error-login', '');
+      }
+
+      if (!/^\+380\d{9}$/.test(phone)) {
+        showError('error-phone', 'Номер має починатися з +380 і містити 13 символів');
+        valid = false;
+      } else {
+        showError('error-phone', '');
+      }
+
+      if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email)) {
+        showError('error-email', 'Введіть дійсну адресу Gmail');
+        valid = false;
+      } else {
+        showError('error-email', '');
+      }
+
+      if (login === phone || login === email || phone === email) {
+        showError('error-login', 'Логін, телефон і пошта не повинні повторюватись');
+        valid = false;
+      }
+
+      const btn = document.getElementById('btn-register');
+      btn.disabled = !valid;
+      btn.style.cursor = valid ? 'pointer' : 'not-allowed';
+    }
+
+    function showError(id, message) {
+      document.getElementById(id).textContent = message;
+    }
+
+    ['login', 'phone', 'email'].forEach(id =>
+      document.getElementById(id).addEventListener('input', checkInputs)
+    );
+
+    document.getElementById('btn-password').addEventListener('click', () => showPopup('password-popup'));
+    document.getElementById('btn-email-edit').addEventListener('click', () => showPopup('email-popup'));
+    overlay.addEventListener('click', hidePopups);
+
+    function validatePasswords() {
+      const newPass = document.getElementById('new-pass').value;
+      const confirmPass = document.getElementById('confirm-pass').value;
+      const error = document.getElementById('pass-error');
+      const btn = document.getElementById('btn-save-pass');
+
+      if (newPass.length < 6) {
+        error.textContent = 'Пароль має бути не менше 6 символів';
+        btn.disabled = true;
+        btn.style.cursor = 'not-allowed';
+        return;
+      }
+
+      if (newPass !== confirmPass) {
+        error.textContent = 'Паролі не співпадають';
+        btn.disabled = true;
+        btn.style.cursor = 'not-allowed';
+        return;
+      }
+
+      error.textContent = '';
+      btn.disabled = false;
+      btn.style.cursor = 'pointer';
+    }
+
+    function validateEmailInput() {
+      const emailInput = document.getElementById('new-email').value.trim();
+      const error = document.getElementById('email-error');
+      const btn = document.getElementById('btn-save-email');
+
+      if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(emailInput)) {
+        error.textContent = 'Введіть дійсну адресу Gmail';
+        btn.disabled = true;
+        btn.style.cursor = 'not-allowed';
+        return;
+      }
+
+      error.textContent = '';
+      btn.disabled = false;
+      btn.style.cursor = 'pointer';
+    }
+
+    ['new-pass', 'confirm-pass'].forEach(id =>
+      document.getElementById(id).addEventListener('input', validatePasswords)
+    );
+
+    document.getElementById('new-email').addEventListener('input', validateEmailInput);
+
+    document.getElementById('btn-save-pass').addEventListener('click', () => {
+      alert('Пароль успішно змінено!');
+      hidePopups();
+    });
+
+    document.getElementById('btn-save-email').addEventListener('click', () => {
+      const newEmail = document.getElementById('new-email').value.trim();
+      document.getElementById('email').value = newEmail;
+      checkInputs();
+      hidePopups();
+      alert('Пошта успішно змінена!');
+    });
+
+    document.getElementById('btn-register').addEventListener('click', () => {
+      alert('Дані збережено успішно!');
+    });
+  </script>
+</body>
+</html>
