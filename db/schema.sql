@@ -45,7 +45,7 @@ CREATE TABLE product (
     purchase_price DECIMAL(10,2) NOT NULL,   
     purchase_date DATE NOT NULL,             
     quantity INT DEFAULT 0,                  
-    image_url VARCHAR(255),                  
+    image_url VARCHAR(255) NOT NULL,                  
     company_id INT NOT NULL,                 
     catalog_id INT NOT NULL,                 
     FOREIGN KEY (company_id) REFERENCES company(id),
