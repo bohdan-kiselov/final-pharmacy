@@ -15,7 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\Pharmacy.Core\Pharmacy.Core.csproj" />
-    <ProjectReference Include="..\Pharmacy.Data.Access\Pharmacy.DataAccess.csproj" />
+    <ProjectReference Include="..\Pharmacy.DataAccess\Pharmacy.DataAccess.csproj" />
     <ProjectReference Include="..\Pharmacy.DataAccess\Pharmacy.DataAccess.csproj" />
   </ItemGroup>
 

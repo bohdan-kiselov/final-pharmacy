@@ -4,7 +4,6 @@ namespace Pharmacy.DataAccess.Entities
 {
     public class RoleEntity
     {
-        [Key]
         public int Id { get; set; }
 
         public required string RoleName { get; set; }

@@ -4,7 +4,6 @@ namespace Pharmacy.DataAccess.Entities
 {
     public class UserEntity
     {
-        [Key]
         public int Id { get; set; }
 
         public required string Login { get; set; }
@@ -16,6 +15,6 @@ namespace Pharmacy.DataAccess.Entities
         public int RoleID { get; set; }
 
         public EmailVerificationTokenEntity? EmailVerificationToken { get; set; }
-        public RoleEntity? Roles { get; set; }
+        public RoleEntity Role { get; set; } = default!;
     }
 }

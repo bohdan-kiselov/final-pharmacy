@@ -1,5 +1,4 @@
-﻿using Pharmacy.Application.Events;
-using Pharmacy.Core.Models;
+﻿using Pharmacy.Core.Models;
 using Pharmacy.DataAccess.Repositories;
 using BCrypt.Net;
 using Pharmacy.Core.Abstractions;
@@ -9,7 +8,6 @@ namespace Pharmacy.Application.Services
 {
     public class UsersService : IUsersService
     {
-        public event EventHandler<UserRegisteredEventArgs> UserRegistered;
 
         private readonly IUsersRepository _userRepository;
         private readonly IEmailVerificationsService _emailVerificationService;
@@ -19,11 +17,7 @@ namespace Pharmacy.Application.Services
         {
             _userRepository = repository ?? throw new ArgumentNullException(nameof(repository));
             _emailVerificationService = emailVerificationService ?? throw new ArgumentNullException(nameof(emailVerificationService));
-
-            UserRegistered += async (sender, args) =>
-            {
-                await _emailVerificationService.SendVerificationToken(args.UserId, args.Email);
-            };
+ 
         }
 
         private string HashPassword(string password)
@@ -45,10 +39,10 @@ namespace Pharmacy.Application.Services
 
             var hashedPassword = HashPassword(password);
 
-            var user = User.Create(login, email, hashedPassword, phone);
+            var user = new User (login, email, hashedPassword, phone );
             var createdUser = await _userRepository.Create(user);
 
-            UserRegistered?.Invoke(this, new UserRegisteredEventArgs(createdUser.Id, createdUser.Email));
+            await _emailVerificationService.SendVerificationToken(createdUser.Id, createdUser.Email);
 
             return (createdUser, null);
         }
@@ -72,23 +66,12 @@ namespace Pharmacy.Application.Services
         }
 
         public async Task<(User? updatedUser, string? error)> UpdateAccountData(User existingUser, string? newLogin, string? newEmail,
-    string? newPhone, string? newPass, string? currentPassword)
+    string? newPhone, string? newPass)
         {
-            if (!string.IsNullOrEmpty(newLogin) || !string.IsNullOrEmpty(newEmail) || !string.IsNullOrEmpty(newPhone) 
-                || !string.IsNullOrEmpty(newPass))
-            {
-                if (string.IsNullOrEmpty(currentPassword))
-                {
-                    return (null, "Для зміни даних користувача необхідно ввести поточний пароль.");
-                }
-                if (!BCrypt.Net.BCrypt.Verify(currentPassword, existingUser.Password))
-                {
-                    return (null, "Невірний поточний пароль");
-                }
-            }
+            string? validationError1;
 
             string updatedLogin = existingUser.Login;
-            if (!string.IsNullOrEmpty(newLogin) && newLogin != existingUser.Login)
+            if (!string.IsNullOrWhiteSpace(newLogin))
             {
                 if (await _userRepository.FindLogin(newLogin))
                 {
@@ -98,7 +81,7 @@ namespace Pharmacy.Application.Services
             }
 
             string updatedEmail = existingUser.Email;
-            if (!string.IsNullOrEmpty(newEmail) && newEmail != existingUser.Email)
+            if (!string.IsNullOrWhiteSpace(newEmail))
             {
                 if (await _userRepository.FindEmail(newEmail))
                 {
@@ -107,32 +90,29 @@ namespace Pharmacy.Application.Services
                 updatedEmail = newEmail;
             }
 
-            string updatedPhone = existingUser.PhoneNumber;
-            if (!string.IsNullOrEmpty(newPhone) && newPhone != existingUser.PhoneNumber)
+            string updatedPhone = !string.IsNullOrWhiteSpace(newPhone) ? newPhone : existingUser.PhoneNumber;
+          
+            string updatedPass = existingUser.Password;
+            if (!string.IsNullOrWhiteSpace(newPass))
             {
-                updatedPhone = newPhone;
-            }
-
-            string updatedPassword = currentPassword!;
-            if (!string.IsNullOrEmpty(newPass))
-            {
-                var validationError1 = User.ValidateUserInput(updatedLogin, updatedEmail, newPass, updatedPhone);
+                validationError1 = User.ValidateUserInput(updatedLogin, updatedEmail, newPass, updatedPhone);
                 if (!string.IsNullOrEmpty(validationError1))
                 {
                     return (null, validationError1);
                 }
-                updatedPassword = HashPassword(newPass);
+                updatedPass = HashPassword(newPass);
             }
-            else
+            else 
             {
-                var validationError = User.ValidateUserInput(updatedLogin, updatedEmail, updatedPassword, updatedPhone);
-                if (!string.IsNullOrEmpty(validationError))
+                validationError1 = User.ValidateProfileData(updatedLogin, updatedEmail, updatedPhone);
+                if (!string.IsNullOrEmpty(validationError1))
                 {
-                    return (null, validationError);
+                    return (null, validationError1);
                 }
             }
 
-            var updatedUser = new User(existingUser.Id, updatedLogin, updatedEmail, updatedPassword, updatedPhone, existingUser.RoleID ?? 1);
+            var updatedUser = new User (existingUser.Id, updatedLogin, updatedEmail, 
+                updatedPass, updatedPhone );
 
             return (updatedUser, null);
         }

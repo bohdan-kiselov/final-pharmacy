@@ -53,6 +53,10 @@ namespace Pharmacy.DataAccess.Configurations
                 .WithOne(t => t.User)
                 .HasForeignKey<EmailVerificationTokenEntity>(t => t.UserId);
 
+            builder.HasOne(u => u.Role)
+                .WithMany(r => r.Users)
+                .HasForeignKey(u => u.RoleID);
+
         }
     }
 }

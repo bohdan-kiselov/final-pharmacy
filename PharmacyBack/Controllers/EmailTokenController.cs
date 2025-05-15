@@ -5,7 +5,7 @@ using PharmacyBack.Contracts;
 namespace PharmacyBack.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class EmailTokenController : ControllerBase
     {
         private readonly IEmailVerificationsService _verificationService;

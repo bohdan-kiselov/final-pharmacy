@@ -83,6 +83,9 @@ builder.Services.AddScoped<IEmailVerificationsService, EmailVerificationsService
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IEmailTokensRepository, EmailTokensRepository>();
 
+builder.Services.AddScoped<IProductsService, ProductsService>();
+builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

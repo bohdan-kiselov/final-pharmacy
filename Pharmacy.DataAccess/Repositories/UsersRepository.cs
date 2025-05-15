@@ -49,24 +49,26 @@ namespace Pharmacy.DataAccess.Repositories
                 Login = user.Login,
                 Email = user.Email,
                 HashPassword = user.Password,
-                PhoneNumber = user.PhoneNumber,
-                RoleID = user.RoleID ?? 1
+                PhoneNumber = user.PhoneNumber
             };
 
             await _context.Users.AddAsync(userEntity);
             await _context.SaveChangesAsync();
 
-            user.Id = userEntity.Id;
+            var returnUser = new User(userEntity.Id, userEntity.Login,
+              userEntity.Email, userEntity.HashPassword, userEntity.PhoneNumber);
 
-            return user;
+            return returnUser;
         }
 
         private User MapToModel(UserEntity entity)
         {
-            return new User(entity.Id, entity.Login, entity.Email, entity.HashPassword, entity.PhoneNumber, entity.RoleID);
+            return new User (entity.Id, entity.Login, entity.Email, 
+                entity.HashPassword, entity.PhoneNumber, entity.IsVerified, entity.RoleID );
             
         }
 
+        /*Оновлює ВСІ поля крім ролі. Треба бути обережним при  створенні об'єкту юзер*/
         public async Task<bool> Update(User user)
         {
             if (user == null)
@@ -81,9 +83,7 @@ namespace Pharmacy.DataAccess.Repositories
             existingEntity.Email = user.Email;
             existingEntity.HashPassword = user.Password;
             existingEntity.PhoneNumber = user.PhoneNumber;
-            // IsVerified не оновлюється це окрема логіка підтвердження нової пошти, можливо треба підняти це питання у наступних мітах
-
-            existingEntity.RoleID = user.RoleID ?? existingEntity.RoleID; 
+            // IsVerified не оновлюється це окрема логіка підтвердження нової пошти 
 
             _context.Users.Update(existingEntity);
             var affectedRows = await _context.SaveChangesAsync();

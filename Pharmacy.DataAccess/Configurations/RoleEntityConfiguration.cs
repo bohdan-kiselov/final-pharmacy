@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Pharmacy.Core.Models;
 using Pharmacy.DataAccess.Entities;
 
 namespace Pharmacy.DataAccess.Configurations
@@ -10,20 +11,21 @@ namespace Pharmacy.DataAccess.Configurations
         {
             builder.ToTable("role");
 
-            builder.HasKey(s => s.Id);
+            builder.HasKey(r => r.Id);
 
 
-            builder.Property(s => s.Id)
+            builder.Property(r => r.Id)
                 .HasColumnName("id")
                 .IsRequired();
 
-            builder.Property(s => s.RoleName)
+            builder.Property(r => r.RoleName)
                 .HasColumnName("role_name")
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(Role.MAX_NAME_LENGTH);
 
 
-            builder.HasMany(s => s.Users)
-                .WithOne(u => u.Roles)
+            builder.HasMany(r => r.Users)
+                .WithOne(u => u.Role)
                 .HasForeignKey(u => u.RoleID);
         }
     }

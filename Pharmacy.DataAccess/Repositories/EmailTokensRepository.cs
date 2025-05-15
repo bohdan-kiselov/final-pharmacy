@@ -39,11 +39,7 @@ namespace Pharmacy.DataAccess.Repositories
             if (tokenEntity == null)
                 return null;
 
-            return new EmailVerificationToken(
-                tokenEntity.UserId,
-                tokenEntity.Token,
-                tokenEntity.ExpiresAt
-            );
+            return new EmailVerificationToken(tokenEntity.UserId, tokenEntity.Token, tokenEntity.ExpiresAt);
         }
 
         public async Task MarkTokenAsUsed(Guid token)

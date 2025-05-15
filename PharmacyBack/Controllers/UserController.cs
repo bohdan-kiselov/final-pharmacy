@@ -12,7 +12,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace PharmacyBack.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
         private readonly IUsersService _usersService;
@@ -25,7 +25,7 @@ namespace PharmacyBack.Controllers
             _jwtService = jwtservice;
         }
 
-        [HttpPost("api/register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UsersRequest request)
         {
             var (user, error) = await _usersService.Register(
@@ -46,7 +46,7 @@ namespace PharmacyBack.Controllers
         }
 
         [Authorize]
-        [HttpGet("api/profile")]
+        [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -61,7 +61,7 @@ namespace PharmacyBack.Controllers
 
         }
 
-        [HttpPost("api/login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UsersRequest request)
         {
             var (isValid, user) = await _usersService.ValidateUserCredentials(request.Login, request.Password);
@@ -76,8 +76,8 @@ namespace PharmacyBack.Controllers
 
 
         [Authorize]
-        [HttpPatch("api/profile")]
-        public async Task<IActionResult> UpdatePersonalAccount([FromBody] UpdatePersonalAccountRequest request)
+        [HttpPatch("profile")]
+        public async Task<IActionResult> UpdatePersonalAccount([FromBody] UsersRequest request)
         {
             var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!int.TryParse(userIdStr, out var userId))
@@ -91,8 +91,8 @@ namespace PharmacyBack.Controllers
                 return NotFound();
             }
 
-            var (updatedUser, error) = await _usersService.UpdateAccountData(user, request.newLogin, request.newEmail, 
-                 request.newPhone, request.NewPass, request.CurrentPassword);
+            var (updatedUser, error) = await _usersService.UpdateAccountData(user, request.Login, request.Email, 
+                 request.Phone, request.Password);
 
             if (error != null)
             {

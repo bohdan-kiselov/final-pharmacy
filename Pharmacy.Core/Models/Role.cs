@@ -2,13 +2,17 @@
 {
     public class Role
     {
-        public int Id { get;}
-        public string RoleName { get;}
+        public const int MAX_NAME_LENGTH = 20;
 
-        public Role(int id, string name) 
+        
+
+        public int Id { get;  }
+        public string RoleName { get; }
+
+        public Role(int id, string roleName)
         {
             Id = id;
-            RoleName = name;
+            RoleName = roleName;
         }
     }
 }
