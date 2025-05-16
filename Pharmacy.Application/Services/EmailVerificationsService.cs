@@ -1,4 +1,6 @@
 ﻿using MailKit.Net.Smtp;
+using MailKit.Security;
+using Microsoft.Extensions.Configuration;
 using MimeKit;
 using Pharmacy.Core.Abstractions;
 using Pharmacy.Core.Models;
@@ -9,10 +11,12 @@ namespace Pharmacy.Application.Services
     public class EmailVerificationsService : IEmailVerificationsService
     {
         private readonly IEmailTokensRepository _tokenRepository;
+        private readonly IConfiguration _config;
 
-        public EmailVerificationsService(IEmailTokensRepository repository)
+        public EmailVerificationsService(IEmailTokensRepository repository, IConfiguration config)
         {
             _tokenRepository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _config = config;
         }
 
         public async Task SendVerificationToken(int id, string email)
@@ -22,12 +26,12 @@ namespace Pharmacy.Application.Services
             await _tokenRepository.Create(id, token);
 
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("Pharmacy", "noreply@pharmacy.com"));
+            message.From.Add(new MailboxAddress(_config["Email:FromName"], _config["Email:FromAddress"]));
             message.To.Add(MailboxAddress.Parse(email));
             message.Subject = "Підтвердження пошти";
 
-
-            var verificationLink = $"http://localhost:7035/EmailToken/verify?token={token}"; // Test
+            var baseUrl = _config["Email:VerificationUrl"];
+            var verificationLink = $"{baseUrl}/api/EmailToken/verify?token={token}";
 
             message.Body = new TextPart("html")
             {
@@ -37,10 +41,24 @@ namespace Pharmacy.Application.Services
             };
 
             using var smtp = new SmtpClient();
-            await smtp.ConnectAsync("sandbox.smtp.mailtrap.io", 587, MailKit.Security.SecureSocketOptions.StartTls);
-            await smtp.AuthenticateAsync("f3488b0f5b0572", "f26caac327b15f");
-            await smtp.SendAsync(message);
-            await smtp.DisconnectAsync(true);
+            try
+            {
+                var portString = _config["Email:Smtp:Port"];
+                if (!int.TryParse(portString, out int port))
+                    throw new InvalidOperationException("SMTP port is not configured correctly.");
+
+                await smtp.ConnectAsync(_config["Email:Smtp:Host"], port, SecureSocketOptions.SslOnConnect);
+                await smtp.AuthenticateAsync(_config["Email:Smtp:Username"], _config["Email:Smtp:Password"]);
+                await smtp.SendAsync(message);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Помилка при відправці email", ex);
+            }
+            finally
+            {
+                await smtp.DisconnectAsync(true);
+            }
         }
 
         public async Task<bool> VerifyToken(Guid token)

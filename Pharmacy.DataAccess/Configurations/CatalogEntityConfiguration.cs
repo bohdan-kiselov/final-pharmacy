@@ -22,6 +22,8 @@ namespace Pharmacy.DataAccess.Configurations
                 .IsRequired()
                 .HasMaxLength(Catalog.MAX_NAME_LENGTH);
 
+            builder.HasIndex(cat => cat.CatalogName).IsUnique();
+
             builder.HasMany(cat => cat.Products)
                 .WithOne(p => p.Catalog)
                 .HasForeignKey(p => p.CatalogId);

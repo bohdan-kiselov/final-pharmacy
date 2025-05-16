@@ -11,13 +11,15 @@
         public bool IsExpired() => DateTime.UtcNow > ExpiresAt;
 
         public void MarkAsUsed() => Used = true;
-        
 
-        public EmailVerificationToken(int userId, Guid token, DateTime expiresAt)
+        public User? user { get; }
+
+        public EmailVerificationToken(int userId, Guid token, DateTime expiresAt, User? user = null)
         {
             UserId = userId;
             Token = token;
             ExpiresAt = expiresAt;
+            this.user = user;
         }
 
         public EmailVerificationToken(int userId, Guid token, DateTime expiresAt, bool used)

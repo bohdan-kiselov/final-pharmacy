@@ -23,6 +23,11 @@ namespace Pharmacy.DataAccess.Repositories
             return await _context.Users.AnyAsync(u => u.Email == email);
         }
 
+        public async Task<bool> FindPhone(string phone)
+        {
+            return await _context.Users.AnyAsync(u => u.PhoneNumber == phone);
+        }
+
         public async Task<User?> GetUser(int userId)
         {
             var entity = await _context.Users
@@ -68,7 +73,20 @@ namespace Pharmacy.DataAccess.Repositories
             
         }
 
-        /*Оновлює ВСІ поля крім ролі. Треба бути обережним при  створенні об'єкту юзер*/
+        public async Task<bool> SwitchIsVerified(int userId)
+        {
+            var existingEntity = await _context.Users.FindAsync(userId);
+            if (existingEntity == null)
+                return false;
+
+            existingEntity.IsVerified = false;
+
+            _context.Users.Update(existingEntity);
+            var affectedRows = await _context.SaveChangesAsync();
+
+            return affectedRows > 0;
+        }
+
         public async Task<bool> Update(User user)
         {
             if (user == null)
@@ -83,7 +101,6 @@ namespace Pharmacy.DataAccess.Repositories
             existingEntity.Email = user.Email;
             existingEntity.HashPassword = user.Password;
             existingEntity.PhoneNumber = user.PhoneNumber;
-            // IsVerified не оновлюється це окрема логіка підтвердження нової пошти 
 
             _context.Users.Update(existingEntity);
             var affectedRows = await _context.SaveChangesAsync();

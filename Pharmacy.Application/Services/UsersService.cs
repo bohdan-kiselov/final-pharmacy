@@ -33,6 +33,9 @@ namespace Pharmacy.Application.Services
             if (await _userRepository.FindEmail(email))
                 return (null, "Електронна пошта вже зайнята.");
 
+            if (await _userRepository.FindPhone(phone))
+                return (null, "Номер телефону вже зайнятий.");
+
             var validationError = User.ValidateUserInput(login, email, password, phone);
             if (!string.IsNullOrEmpty(validationError))
                 return (null, validationError);
@@ -87,11 +90,22 @@ namespace Pharmacy.Application.Services
                 {
                     return (null, "Електронна пошта вже зайнята.");
                 }
+                await _userRepository.SwitchIsVerified(existingUser.Id);
+
+                await _emailVerificationService.SendVerificationToken(existingUser.Id, newEmail);
                 updatedEmail = newEmail;
             }
 
-            string updatedPhone = !string.IsNullOrWhiteSpace(newPhone) ? newPhone : existingUser.PhoneNumber;
-          
+            string updatedPhone = existingUser.PhoneNumber;
+            if (!string.IsNullOrWhiteSpace(newPhone))
+            {
+                if (await _userRepository.FindPhone(newPhone))
+                {
+                    return (null, "Номер телефону вже зайнятий.");
+                }
+                updatedPhone = newPhone;
+            }
+
             string updatedPass = existingUser.Password;
             if (!string.IsNullOrWhiteSpace(newPass))
             {

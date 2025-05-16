@@ -21,6 +21,8 @@ namespace Pharmacy.DataAccess.Configurations
                 .HasColumnName("token")
                 .IsRequired();
 
+            builder.HasIndex(e => e.Token).IsUnique();
+
             builder.Property(t => t.ExpiresAt)
                 .HasColumnName("expires_at")
                 .IsRequired();

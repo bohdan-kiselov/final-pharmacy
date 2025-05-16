@@ -39,7 +39,11 @@ main - лише для готового, робочого коду. dev - для
 
 ваш_секретний_ключ_для_JWT повинен бути не менше ніж 32 символи: ключ >= 32.
 
-Приклад структури файлу `appsettings.Development.json` з необхідними секціями:
+Нижче наведено приклад структури файлу `appsettings.Development.json` з необхідними секціями:
+
+* **`ConnectionStrings`**: Містить рядок підключення до вашої бази даних.
+* **`JwtSettings`**: Містить параметри для генерації та валідації JWT токенів. `SecretKey` повинен бути не менше ніж 32 символи.
+* **`Email`**: Містить параметри для налаштування сервісу відправки електронних листів.
 
 ```json
 {
@@ -57,11 +61,48 @@ main - лише для готового, робочого коду. dev - для
     "Issuer": "<емітент_JWT>",
     "Audience": "<аудиторія_JWT>",
     "ExpiryMinutes": <термін_дії_токена_в_хвилинах>
+  },
+  "Email": {
+    "VerificationUrl": "https://localhost:<ваш номер локалхосту>",
+    "Smtp": {
+      "Username": "pharmacyteam0@gmail.com", - ці дані так і вставити
+      "Password": "tgoz banb mihb ullh" - ці дані так і вставити
+    }
   }
 }
                                                                                
-                                                                               
-                                                                               
+## Важливо 
+
+Переконайтеся, що вміст `appsettings.json` та `appsettings.Development.json` разом створювали код, що знаходиться нижче: 
+
+```json
+"Email": {
+  "VerificationUrl": "https://localhost:7035",
+  "FromName": "Pharmacy",
+  "FromAddress": "pharmacyteam0@gmail.com",
+  "Smtp": {
+    "Host": "smtp.gmail.com",
+    "Port": 465,
+    "Username": "pharmacyteam0@gmail.com",
+    "Password": "tgoz banb mihb ullh",
+  }
+}
+
+## Пояснення параметрів:
+
+VerificationUrl — базовий URL для побудови посилання підтвердження email (наприклад, https://localhost:7035).
+
+FromName — ім’я відправника, яке бачить користувач.
+
+FromAddress — адреса відправника (має збігатися з Username у більшості випадків).
+
+Smtp.Host — SMTP-сервер (для Gmail — smtp.gmail.com).
+
+Smtp.Port — порт для підключення (Gmail: 465).
+
+Smtp.Username — email-логін.
+
+Smtp.Password — пароль додатку Gmail, створений у Google Account > Безпека > Паролі додатків.                                                                        
                                                                                
 
                                                                                

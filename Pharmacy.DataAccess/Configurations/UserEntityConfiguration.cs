@@ -22,10 +22,14 @@ namespace Pharmacy.DataAccess.Configurations
                 .IsRequired()
                 .HasMaxLength(User.MAX_LOGIN_LENGTH);
 
+            builder.HasIndex(u => u.Login).IsUnique();
+
             builder.Property(u => u.Email)
                 .HasColumnName("email")
                 .IsRequired()
                 .HasMaxLength(User.MAX_EMAIL_LENGTH);
+
+            builder.HasIndex(u => u.Email).IsUnique();
 
             builder.Property(u => u.HashPassword)
                 .HasColumnName("password_hash")
@@ -36,6 +40,8 @@ namespace Pharmacy.DataAccess.Configurations
                 .HasColumnName("phone_number")
                 .IsRequired()
                 .HasMaxLength(User.MAX_PHONE_LENGTH);
+
+            builder.HasIndex(u => u.PhoneNumber).IsUnique();
 
             builder.Property(u => u.IsVerified)
                 .HasColumnName("is_verified")
@@ -56,6 +62,7 @@ namespace Pharmacy.DataAccess.Configurations
             builder.HasOne(u => u.Role)
                 .WithMany(r => r.Users)
                 .HasForeignKey(u => u.RoleID);
+
 
         }
     }

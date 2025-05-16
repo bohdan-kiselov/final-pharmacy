@@ -15,6 +15,9 @@ namespace Pharmacy.DataAccess.Repositories
 
         public async Task Create(int userId, Guid token)
         {
+            var oldTokens = _context.EmailVerificationTokens.Where(t => t.UserId == userId);
+
+            _context.EmailVerificationTokens.RemoveRange(oldTokens);
 
             var tokenEntity = new EmailVerificationTokenEntity
             {
@@ -25,33 +28,6 @@ namespace Pharmacy.DataAccess.Repositories
 
             await _context.EmailVerificationTokens.AddAsync(tokenEntity);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task<EmailVerificationToken?> GetValidToken(Guid token)
-        {
-
-            var tokenEntity = await _context.EmailVerificationTokens
-                .FirstOrDefaultAsync(t =>
-                    t.Token == token &&
-                    !t.Used &&
-                    t.ExpiresAt > DateTime.UtcNow);
-
-            if (tokenEntity == null)
-                return null;
-
-            return new EmailVerificationToken(tokenEntity.UserId, tokenEntity.Token, tokenEntity.ExpiresAt);
-        }
-
-        public async Task MarkTokenAsUsed(Guid token)
-        {
-            var tokenEntity = await _context.EmailVerificationTokens
-                .FirstOrDefaultAsync(t => t.Token == token);
-
-            if (tokenEntity != null)
-            {
-                tokenEntity.Used = true;
-                await _context.SaveChangesAsync();
-            }
         }
 
         public async Task<bool> ConfirmEmail(Guid token)
@@ -67,7 +43,7 @@ namespace Pharmacy.DataAccess.Repositories
                 return false;
 
             tokenEntity.User.IsVerified = true;
-            await MarkTokenAsUsed(token);
+            tokenEntity.Used = true;
 
             await _context.SaveChangesAsync();
             return true;

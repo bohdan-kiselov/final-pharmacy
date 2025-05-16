@@ -105,7 +105,12 @@ namespace PharmacyBack.Controllers
             }
 
             var updateResult = await _usersService.UpdateUser(updatedUser);
-            if (updateResult)
+            if (updateResult && request.Email != null)
+            {
+                return Ok("Профіль оновлено. На нову електронну пошту надіслано лист для підтвердження. " +
+                    "Зміну буде застосовано після верифікації.");
+            }
+            else if (updateResult)
             {
                 return Ok("Профіль оновлено.");
             }

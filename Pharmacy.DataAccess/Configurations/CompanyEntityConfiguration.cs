@@ -22,10 +22,14 @@ namespace Pharmacy.DataAccess.Configurations
                 .IsRequired()
                 .HasMaxLength(Company.MAX_NAME_LENGTH);
 
+            builder.HasIndex(c => c.CompanyName).IsUnique();
+
             builder.Property(com => com.Email)
                 .HasColumnName("email")
                 .IsRequired()
                 .HasMaxLength(Company.MAX_EMAIL_LENGTH);
+
+            builder.HasIndex(c => c.Email).IsUnique();
 
             builder.Property(com => com.Country)
                 .HasColumnName("country")

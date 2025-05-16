@@ -23,10 +23,13 @@ namespace Pharmacy.DataAccess.Configurations
                 .IsRequired()
                 .HasMaxLength(Role.MAX_NAME_LENGTH);
 
+            builder.HasIndex(r => r.RoleName).IsUnique();
 
             builder.HasMany(r => r.Users)
                 .WithOne(u => u.Role)
                 .HasForeignKey(u => u.RoleID);
+
+            
         }
     }
 }
