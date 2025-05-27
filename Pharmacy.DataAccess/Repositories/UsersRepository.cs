@@ -44,6 +44,14 @@ namespace Pharmacy.DataAccess.Repositories
             return entity == null ? null : MapToModel(entity);
         }
 
+        public async Task<User?> GetUserByEmail(string email)
+        {
+            var entity = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            return entity == null ? null : MapToModel(entity);
+        }
+
         public async Task<User> Create(User user)
         {
             if (user == null)
@@ -61,7 +69,7 @@ namespace Pharmacy.DataAccess.Repositories
             await _context.SaveChangesAsync();
 
             var returnUser = new User(userEntity.Id, userEntity.Login,
-              userEntity.Email, userEntity.HashPassword, userEntity.PhoneNumber);
+              userEntity.Email, userEntity.PhoneNumber, userEntity.HashPassword);
 
             return returnUser;
         }
@@ -69,7 +77,7 @@ namespace Pharmacy.DataAccess.Repositories
         private User MapToModel(UserEntity entity)
         {
             return new User (entity.Id, entity.Login, entity.Email, 
-                entity.HashPassword, entity.PhoneNumber, entity.IsVerified, entity.RoleID );
+                 entity.PhoneNumber, entity.HashPassword, entity.IsVerified, entity.RoleID );
             
         }
 
@@ -108,5 +116,36 @@ namespace Pharmacy.DataAccess.Repositories
             return affectedRows > 0;
         }
 
+
+        public async Task<User?> FindUserByValidToken(string token)
+        {
+            var realToken = await _context.EmailVerificationTokens.FirstOrDefaultAsync(t => t.Token.ToString() == token);
+            if (realToken == null || realToken.Used)
+                return null;
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == realToken.UserId);
+
+            if (user == null)
+                return null;
+
+            return new User(user.Id, user.Login, user.Email, user.PhoneNumber);
+        }
+
+        public async Task<bool> UpdatePassword(int userId, String hashedPass)
+        {
+            if (string.IsNullOrWhiteSpace(hashedPass)) return false;
+
+            var existingEntity = await _context.Users.FindAsync(userId);
+
+            if (existingEntity == null)
+                return false;
+
+            existingEntity.HashPassword = hashedPass;
+
+            _context.Users.Update(existingEntity);
+            var affectedRows = await _context.SaveChangesAsync();
+
+            return affectedRows > 0;
+        }
     }
 }

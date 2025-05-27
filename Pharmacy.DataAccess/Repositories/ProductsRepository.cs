@@ -40,5 +40,20 @@ namespace Pharmacy.DataAccess.Repositories
 
         }
 
+        public async Task<List<Product>> GetProductsByName(String productName)
+        {
+            var products = await _context.Products
+                .Include(p => p.Company)
+                .AsNoTracking()
+                .Where(p => EF.Functions.Like(p.Name.ToLower(), $"%{productName}%"))
+                .ToListAsync();
+
+            return products.Select(p => new Product(
+                p.Id, p.Name, p.Description, p.Price, p.PurchasePrice,
+                p.PurchaseDate, p.Quantity, p.ImageUrl,
+                new Company(p.Company.CompanyName, p.Company.Email, p.Company.Country)
+            )).ToList();
+        }
+
     }
 }

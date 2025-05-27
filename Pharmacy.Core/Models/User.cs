@@ -21,14 +21,14 @@ namespace Pharmacy.Core.Models
         public int? RoleID { get;  }
         public Role? Role { get;  }
 
-        public User(int id, string login, string email, string password, string phoneNumber,
+        public User(int id, string login, string email, string phoneNumber, string password = "",
             bool isVerified = false, int? roleId = null, Role? role = null)
         {
             Id = id;
             Login = login;
             Email = email;
-            Password = password;
             PhoneNumber = phoneNumber;
+            Password = password;
             IsVerified = isVerified;
             RoleID = roleId;
             Role = role;

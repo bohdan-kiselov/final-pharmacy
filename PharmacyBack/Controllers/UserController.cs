@@ -121,5 +121,15 @@ namespace PharmacyBack.Controllers
         }
 
 
+        [HttpPost("reset-pass")]
+        public async Task<IActionResult> ResetPassword([FromBody] PasswordResetRequest request)
+        {
+            var success = await _usersService.ResetPassword(request.Token, request.NewPassword);
+            if (!success.isReset)
+                return BadRequest(success.error);
+
+            return Ok("Пароль успішно змінено");
+        }
+
     }
 }

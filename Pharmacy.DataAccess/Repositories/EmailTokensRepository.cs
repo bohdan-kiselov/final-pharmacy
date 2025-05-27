@@ -49,5 +49,20 @@ namespace Pharmacy.DataAccess.Repositories
             return true;
         }
 
+
+        public async Task<bool> SwitchIsUsed(String token)
+        {
+
+            var existingEntity = await _context.EmailVerificationTokens.FirstOrDefaultAsync(t => t.Token.ToString() == token);
+            if (existingEntity == null)
+                return false;
+
+            existingEntity.Used = true;
+
+            _context.EmailVerificationTokens.Update(existingEntity);
+            var affectedRows = await _context.SaveChangesAsync();
+
+            return affectedRows > 0;
+        }
     }
 }

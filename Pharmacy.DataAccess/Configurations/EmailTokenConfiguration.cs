@@ -11,7 +11,12 @@ namespace Pharmacy.DataAccess.Configurations
         {
             builder.ToTable("email_verification_tokens");
 
-            builder.HasKey(t => t.UserId);
+
+            builder.HasKey(t => t.Id);
+
+            builder.Property(t => t.Id)
+                .HasColumnName("id")
+                .ValueGeneratedOnAdd();
 
             builder.Property(t => t.UserId)
                 .HasColumnName("user_id")
@@ -32,8 +37,8 @@ namespace Pharmacy.DataAccess.Configurations
                 .IsRequired();
 
             builder.HasOne(t => t.User)
-                .WithOne(u => u.EmailVerificationToken)
-                .HasForeignKey<EmailVerificationTokenEntity>(t => t.UserId);
+                .WithMany(u => u.EmailVerificationTokens)
+                .HasForeignKey(t => t.UserId);
 
         }
     }

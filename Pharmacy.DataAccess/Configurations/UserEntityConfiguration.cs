@@ -55,9 +55,9 @@ namespace Pharmacy.DataAccess.Configurations
                 .HasColumnName("role_id")
                 .HasDefaultValueSql("1");
 
-            builder.HasOne(u => u.EmailVerificationToken)
+            builder.HasMany(u => u.EmailVerificationTokens)
                 .WithOne(t => t.User)
-                .HasForeignKey<EmailVerificationTokenEntity>(t => t.UserId);
+                .HasForeignKey(t => t.UserId);
 
             builder.HasOne(u => u.Role)
                 .WithMany(r => r.Users)

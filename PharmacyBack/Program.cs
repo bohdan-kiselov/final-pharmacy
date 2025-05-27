@@ -114,7 +114,7 @@ app.UseCors();
 
 var defaultFilesOptions = new DefaultFilesOptions();
 defaultFilesOptions.DefaultFileNames.Clear();
-defaultFilesOptions.DefaultFileNames.Add("Реєстрація.html");
+defaultFilesOptions.DefaultFileNames.Add("Вхід.html");
 app.UseDefaultFiles(defaultFilesOptions);
 
 // Налаштування для обслуговування статичних файлів з папки wwwroot

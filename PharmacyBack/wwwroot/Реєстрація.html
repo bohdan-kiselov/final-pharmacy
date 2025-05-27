@@ -404,7 +404,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     localStorage.setItem('authToken', token);
                     showMessage("Ви успішно зареєструвалися! Токен збережено.", "success");
                 } else {
-                    showMessage("Реєстрація успішна, але токен не отримано.", "error");
+                    showMessage("Реєстрація успішна.", "error");
                 }
             } else {
                 const data = await response.json();

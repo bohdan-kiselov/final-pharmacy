@@ -14,7 +14,7 @@ namespace Pharmacy.DataAccess.Entities
         public DateTime CreatedAt { get; set; } // yyyy-MM-dd HH:mm
         public int RoleID { get; set; }
 
-        public EmailVerificationTokenEntity? EmailVerificationToken { get; set; }
+        public ICollection<EmailVerificationTokenEntity> EmailVerificationTokens { get; set; } = new List<EmailVerificationTokenEntity>();
         public RoleEntity Role { get; set; } = default!;
     }
 }
