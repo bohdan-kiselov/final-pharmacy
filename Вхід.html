@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pharmacy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: white;
+    }
+
+    .container {
+      position: relative;
+      width: 1440px;
+      height: 900px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .section {
+      position: absolute;
+      width: 690px;
+      height: 483px;
+      background: #DBDBDB;
+      padding: 20px;
+    }
+
+    .left-section {
+      left: 20px;
+      top: 106px;
+    }
+
+    .right-section {
+      left: 727px;
+      top: 106px;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-family: 'Irish Grover';
+    }
+
+    .section-subtitle {
+      font-size: 16px;
+      font-family: 'Irish Grover';
+      margin-top: 10px;
+    }
+
+    .section-description {
+      margin-top: 30px;
+      font-size: 20px;
+      font-family: 'Irish Grover';
+      text-align: justify;
+    }
+
+    .button {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      width: 329px;
+      height: 66px;
+      background: #9E9E9E;
+      border-radius: 37px;
+      border: 1px solid black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-family: 'Irish Grover';
+      cursor: pointer;
+      user-select: none;
+      transition: opacity 0.3s;
+    }
+
+    .logo-img {
+      position: absolute;
+  top: 20px;
+  left: 12px;
+  width: 200px; /* або будь-який потрібний розмір */
+  height: auto;
+    }
+
+    .input-field {
+      margin-top: 20px;
+    }
+
+    .input-field label {
+      font-size: 20px;
+    }
+
+    .input-field input {
+      width: 500px;
+      height: 41px;
+      background: #E9E9E9;
+      border-radius: 59px;
+      border: 1px solid black;
+      padding: 10px;
+      font-size: 18px;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .banner-top, .banner-bottom {
+      position: absolute;
+      object-fit: cover;
+    }
+
+    .banner-top {
+      top: 0;
+      left: 270px;
+      width: 1150px;
+      height: 75px;
+    }
+
+    .banner-bottom {
+      top: 742px;
+      left: 20px;
+      width: 1400px;
+      height: 158px;
+    }
+  </style>
+</head>
+<body><!-- Модальне вікно -->
+    <!-- Модальне вікно -->
+<div id="forgot-modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+width: 586px; height: 452px; background: white; box-shadow: 0 0 20px rgba(0,0,0,0.3); z-index: 1000; overflow: hidden; border-radius: 12px;">
+
+<div style="left: 168px; top: 50px; position: absolute; color: black; font-size: 24px; font-family: Inter; font-weight: 600;">
+  Відновлення паролю
+</div>
+
+<!-- Мітка -->
+<div style="width: 299px; left: 53px; top: 157px; position: absolute; color: black; font-size: 24px;
+  font-family: Inter; font-weight: 400;">
+  Пошта*
+</div>
+
+<!-- Поле вводу -->
+<div style="width: 500px; height: 41px; left: 43px; top: 192px; position: absolute; background: #E9E9E9;
+  border-radius: 59px; border: 1px black solid;">
+  <input type="email" placeholder="Введіть вашу пошту" style="
+    width: calc(100% - 40px); /* Виправлено: компенсуємо padding */
+    height: 100%;
+    border: none;
+    border-radius: 59px;
+    padding: 0 20px;
+    font-size: 18px;
+    background: transparent;
+  " />
+</div>
+
+<!-- Кнопка -->
+<div id="send-btn" style="width: 329px; height: 66.29px; left: 250px; top: 372px; position: absolute;
+  background: #9E9E9E; border-radius: 37px; border: 1px black solid; display: flex; align-items: center; justify-content: center;
+  font-size: 32px; font-family: 'Irish Grover'; cursor: pointer;">
+  Відправити
+</div>
+
+<!-- Кнопка закриття -->
+<div onclick="closeModal()" style="position: absolute; top: 10px; right: 20px; font-size: 24px;
+  cursor: pointer;">✕</div>
+</div>
+
+    
+
+  <div class="container">
+    
+    <img class="banner-top" src="https://www.rbc.ua/static/img/p/i/pixabay_lekarstvo_300677bf84ce84ff6d4130d32778d6d8_1200x675.jpg" alt="Banner Top">
+
+    <img class="banner-bottom" src="https://www.rbc.ua/static/img/p/i/pixabay_lekarstvo_300677bf84ce84ff6d4130d32778d6d8_650x410.jpg" alt="Bottom Banner">
+ <!-- !!!!!ТУТ НАТ ГЛАВНУЮ  -->
+     <a href="Головна.html">
+      <img src="https://i.postimg.cc/x81DPy7H/1.png" class="logo-img" alt="Лого">
+    </a>
+
+    <!-- Реєстрація -->
+    <div class="section left-section">
+      <div class="section-title">Новий користувач</div>
+      <div class="section-subtitle">Реєстрація</div>
+      <div class="section-description">
+        Створення облікового запису допоможе робити наступні покупки швидше (не треба буде знову вводити адресу та контактну інформацію), бачити стан замовлення,  а також бачити замовлення, зроблені раніше. 
+
+      </div>
+
+      <div class="button" id="btn-continue">Продовжити</div>
+    </div>
+
+    <!-- Авторизація -->
+    <div class="section right-section">
+      <div class="section-title">Вже зареєстрований</div>
+      <div class="section-subtitle">Авторизація</div>
+
+<div class="input-field">
+  <label>Логін*</label><br />
+  <input type="text" id="login" />
+  <div class="error" id="error-login"></div>
+</div>
+
+<div class="input-field">
+  <label>Пароль*</label><br />
+  <input type="password" id="password" />
+  <div class="error" id="error-password"></div>
+</div>
+
+<div class="button" style="top: 347px; width: 205px; font-size: 24px;" id="btn-forgot">Забули пароль</div>
+<div class="button" style="left: 342px;" id="btn-login">Увійти</div>
+
+    </div>
+  </div>
+  
+
+ <script>
+  // Показати модальне вікно "Забули пароль"
+  document.getElementById('btn-forgot').addEventListener('click', () => {
+    document.getElementById('forgot-modal').style.display = 'block';
+  });
+
+  // Закрити модальне вікно
+  function closeModal() {
+    document.getElementById('forgot-modal').style.display = 'none';
+  }
+
+  // Кнопка "Відправити" у модальному вікні
+  document.getElementById('send-btn').addEventListener('click', () => {
+    alert('Інструкції надіслано на вашу пошту');
+    closeModal();
+  });
+
+  // Показати помилку
+  function setError(id, message) {
+    document.getElementById(id).textContent = message;
+  }
+
+  // Автовалідація логіна
+  document.getElementById('login').addEventListener('input', () => {
+    const loginValue = document.getElementById('login').value.trim();
+    if (/^[a-zA-Z0-9]{3,16}$/.test(loginValue)) {
+      setError('error-login', '');
+    } else {
+      setError('error-login', 'Логін має містити латинські літери або цифри (3–16 символів)');
+    }
+  });
+
+  // Автовалідація паролю
+  document.getElementById('password').addEventListener('input', () => {
+    const passwordValue = document.getElementById('password').value;
+    if (/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/.test(passwordValue)) {
+      setError('error-password', '');
+    } else {
+      setError('error-password', 'Пароль має містити латинські літери та цифри (8–16 символів)');
+    }
+  });
+
+  // Загальна валідація форми
+  function validateLoginForm() {
+    const login = document.getElementById('login').value.trim();
+    const password = document.getElementById('password').value;
+    let valid = true;
+
+    if (!/^[a-zA-Z0-9]{3,16}$/.test(login)) {
+      setError('error-login', 'Логін має містити латинські літери або цифри (3–16 символів)');
+      valid = false;
+    }
+
+    if (!/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/.test(password)) {
+      setError('error-password', 'Пароль має містити латинські літери та цифри (8–16 символів)');
+      valid = false;
+    }
+
+    return valid;
+  }
+
+  // Натискання на кнопку "Увійти"
+  document.getElementById('btn-login').addEventListener('click', async () => {
+    if (!validateLoginForm()) return;
+
+    const login = document.getElementById('login').value.trim();
+    const password = document.getElementById('password').value;
+
+    const loginData = {
+      login: login,
+      password: password
+    };
+
+    try {
+      const response = await fetch('https://localhost:7035/api/User/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(loginData)
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const token = data.token;
+
+        if (token) {
+          localStorage.setItem('authToken', token);
+          alert('Вхід успішний!');
+          window.location.href = 'https://localhost:7035/Головна.html';
+        } else {
+          alert('Вхід успішний, але токен не отримано.');
+        }
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || 'Помилка авторизації');
+      }
+    } catch (error) {
+      alert('Не вдалося з’єднатись із сервером');
+    }
+  });
+
+  // Кнопка "Продовжити" — перехід на реєстрацію
+  document.getElementById('btn-continue').addEventListener('click', () => {
+    window.location.href = 'https://localhost:7035/Реєстрація.html';
+  });
+</script>
+
+
+
+  
+</body>
+</html>
