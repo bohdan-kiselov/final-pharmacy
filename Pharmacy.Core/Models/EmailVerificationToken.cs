@@ -2,7 +2,7 @@
 {
     public class EmailVerificationToken
     {
-
+        public int Id { get; }
         public int UserId { get; }
         public Guid Token { get; }
         public DateTime ExpiresAt { get;  }
@@ -14,20 +14,15 @@
 
         public User? user { get; }
 
-        public EmailVerificationToken(int userId, Guid token, DateTime expiresAt, User? user = null)
+        public EmailVerificationToken(int id, int userId, Guid token, DateTime expiresAt, bool used = false, User? user = null)
         {
+            Id = id;
             UserId = userId;
             Token = token;
             ExpiresAt = expiresAt;
+            Used = used;
             this.user = user;
         }
-
-        public EmailVerificationToken(int userId, Guid token, DateTime expiresAt, bool used)
-            : this (userId, token, expiresAt)
-        {
-            Used = used;
-        }
-
 
     }
 }

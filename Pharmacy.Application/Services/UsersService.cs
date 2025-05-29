@@ -3,6 +3,7 @@ using Pharmacy.DataAccess.Repositories;
 using BCrypt.Net;
 using Pharmacy.Core.Abstractions;
 using System.Numerics;
+using System.Text.RegularExpressions;
 
 namespace Pharmacy.Application.Services
 {
@@ -126,7 +127,7 @@ namespace Pharmacy.Application.Services
             }
 
             var updatedUser = new User (existingUser.Id, updatedLogin, updatedEmail, 
-                updatedPass, updatedPhone );
+               updatedPhone, updatedPass );
 
             return (updatedUser, null);
         }
@@ -135,6 +136,35 @@ namespace Pharmacy.Application.Services
         {
             return await _userRepository.Update(user);
         }
+
+        public async Task<(bool isReset, String error)> ResetPassword(String token, String newPass)
+        {
+
+            var user = await _userRepository.FindUserByValidToken(token);
+            if (user == null) return (false, "Токен недійсний");
+
+            if (string.IsNullOrWhiteSpace(newPass) ||
+                newPass.Length < User.MIN_PASS_LENGTH || newPass.Length > User.MAX_PASS_LENGTH ||
+                !Regex.IsMatch(newPass, @"^(?=.*[A-Za-z])(?=.*\d).+$"))
+            {
+                return (false, "Пароль повинен складатися з 8-16 символів і містити принаймні одну літеру та одну цифру.");
+            }
+
+            var hashedPass = HashPassword(newPass);
+
+            if (!await _userRepository.UpdatePassword(user.Id, hashedPass)) return (false, "Невдалося змінити пароль");
+            
+            await _emailVerificationService.SwitchTokenIsUsed(token);
+
+            return (true, "Пароль змінено успішно!");
+
+        }
+
+        public async Task<User?> GetUserByEmail(String email)
+        {
+            return await _userRepository.GetUserByEmail(email);
+        }
+
 
     }
 }

@@ -67,7 +67,7 @@ main - лише для готового, робочого коду. dev - для
     "VerificationUrl": "https://localhost:<ваш номер локалхосту>",
     "Smtp": {
       "Username": "pharmacyteam0@gmail.com", - ці дані так і вставити
-      "Password": "tgoz banb mihb ullh" - ці дані так і вставити
+      "Password": "ttjn bebb ntfj yncn" - ці дані так і вставити
     }
   }
 }
@@ -85,7 +85,7 @@ main - лише для готового, робочого коду. dev - для
     "Host": "smtp.gmail.com",
     "Port": 465,
     "Username": "pharmacyteam0@gmail.com",
-    "Password": "tgoz banb mihb ullh",
+    "Password": "ttjn bebb ntfj yncn",
   }
 }
 
