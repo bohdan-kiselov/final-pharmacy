@@ -214,8 +214,8 @@
 
     <!-- ЗРОБЛЕНО КЛІКАБЕЛЬНИМ -->
       <!-- !!!!!ТУТ НАТ ГЛАВНУЮ  -->
-    <a href="">
-      <img src="https://raw.githubusercontent.com/bohdan-kiselov/final-pharmacy/Front/проект/картинки/лого1.png" class="logo-img" alt="Лого">
+    <a href="Головна.html">
+      <img src="https://i.postimg.cc/x81DPy7H/1.png" class="logo-img" alt="Лого">
     </a>
 
     
@@ -404,7 +404,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     localStorage.setItem('authToken', token);
                     showMessage("Ви успішно зареєструвалися! Токен збережено.", "success");
                 } else {
-                    showMessage("Реєстрація успішна.", "error");
+                    showMessage("Реєстрація успішна, але токен не отримано.", "error");
                 }
             } else {
                 const data = await response.json();

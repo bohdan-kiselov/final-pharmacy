@@ -179,8 +179,8 @@ width: 586px; height: 452px; background: white; box-shadow: 0 0 20px rgba(0,0,0,
 
     <img class="banner-bottom" src="https://www.rbc.ua/static/img/p/i/pixabay_lekarstvo_300677bf84ce84ff6d4130d32778d6d8_650x410.jpg" alt="Bottom Banner">
  <!-- !!!!!ТУТ НАТ ГЛАВНУЮ  -->
-     <a href="">
-      <img src="https://raw.githubusercontent.com/bohdan-kiselov/final-pharmacy/Front/проект/картинки/лого1.png" class="logo-img" alt="Лого">
+     <a href="Головна.html">
+      <img src="https://i.postimg.cc/x81DPy7H/1.png" class="logo-img" alt="Лого">
     </a>
 
     <!-- Реєстрація -->
@@ -200,91 +200,92 @@ width: 586px; height: 452px; background: white; box-shadow: 0 0 20px rgba(0,0,0,
       <div class="section-title">Вже зареєстрований</div>
       <div class="section-subtitle">Авторизація</div>
 
-      <div class="input-field">
-        <label>login*</label><br />
-        <input type="email" id="login-email" />
-        <div class="error" id="error-login-email"></div>
-      </div>
+<div class="input-field">
+  <label>Логін*</label><br />
+  <input type="text" id="login" />
+  <div class="error" id="error-login"></div>
+</div>
 
-      <div class="input-field">
-        <label>Пароль*</label><br />
-        <input type="password" id="login-pass" />
-        <div class="error" id="error-login-pass"></div>
-      </div>
+<div class="input-field">
+  <label>Пароль*</label><br />
+  <input type="password" id="password" />
+  <div class="error" id="error-password"></div>
+</div>
 
-      <div class="button" style="top: 347px; width: 205px;font-size: 24px;">Забули пароль</div>
-      <div class="button" style="left: 342px;" id="btn-login">Увійти</div>
+<div class="button" style="top: 347px; width: 205px; font-size: 24px;" id="btn-forgot">Забули пароль</div>
+<div class="button" style="left: 342px;" id="btn-login">Увійти</div>
+
     </div>
   </div>
   
 
  <script>
-  // Показати модальне вікно
-  document.querySelector('.button[style*="top: 347px"]').addEventListener('click', () => {
+  // Показати модальне вікно "Забули пароль"
+  document.getElementById('btn-forgot').addEventListener('click', () => {
     document.getElementById('forgot-modal').style.display = 'block';
   });
 
-  // Закриття модального вікна (✕)
+  // Закрити модальне вікно
   function closeModal() {
     document.getElementById('forgot-modal').style.display = 'none';
   }
 
-  // Натискання кнопки "Відправити" у модальному вікні
+  // Кнопка "Відправити" у модальному вікні
   document.getElementById('send-btn').addEventListener('click', () => {
     alert('Інструкції надіслано на вашу пошту');
     closeModal();
   });
 
-  // Функція виводу повідомлення про помилку
-  function setError(id, msg) {
-    document.getElementById(id).textContent = msg;
+  // Показати помилку
+  function setError(id, message) {
+    document.getElementById(id).textContent = message;
   }
 
-  // Автовалідація логіна при введенні
-  document.getElementById('login-email').addEventListener('input', () => {
-    const login = document.getElementById('login-email').value.trim();
-    if (/^[a-zA-Z0-9]{3,16}$/.test(login)) {
-      setError('error-login-email', '');
+  // Автовалідація логіна
+  document.getElementById('login').addEventListener('input', () => {
+    const loginValue = document.getElementById('login').value.trim();
+    if (/^[a-zA-Z0-9]{3,16}$/.test(loginValue)) {
+      setError('error-login', '');
     } else {
-      setError('error-login-email', 'Логін має містити латинські літери або цифри (3–16 символів)');
+      setError('error-login', 'Логін має містити латинські літери або цифри (3–16 символів)');
     }
   });
 
-  // Автовалідація паролю при введенні
-  document.getElementById('login-pass').addEventListener('input', () => {
-    const pass = document.getElementById('login-pass').value;
-    if (/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/.test(pass)) {
-      setError('error-login-pass', '');
+  // Автовалідація паролю
+  document.getElementById('password').addEventListener('input', () => {
+    const passwordValue = document.getElementById('password').value;
+    if (/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/.test(passwordValue)) {
+      setError('error-password', '');
     } else {
-      setError('error-login-pass', 'Пароль має містити латинські літери та цифри (8–16 символів)');
+      setError('error-password', 'Пароль має містити латинські літери та цифри (8–16 символів)');
     }
   });
 
-  // Валідація при натисканні кнопки
-  function validateLogin() {
-    const login = document.getElementById('login-email').value.trim();
-    const pass = document.getElementById('login-pass').value;
+  // Загальна валідація форми
+  function validateLoginForm() {
+    const login = document.getElementById('login').value.trim();
+    const password = document.getElementById('password').value;
     let valid = true;
 
     if (!/^[a-zA-Z0-9]{3,16}$/.test(login)) {
-      setError('error-login-email', 'Логін має містити латинські літери або цифри (3–16 символів)');
+      setError('error-login', 'Логін має містити латинські літери або цифри (3–16 символів)');
       valid = false;
     }
 
-    if (!/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/.test(pass)) {
-      setError('error-login-pass', 'Пароль має містити латинські літери та цифри (8–16 символів)');
+    if (!/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/.test(password)) {
+      setError('error-password', 'Пароль має містити латинські літери та цифри (8–16 символів)');
       valid = false;
     }
 
     return valid;
   }
 
-   // Обробка кліку по кнопці "Увійти"
+  // Натискання на кнопку "Увійти"
   document.getElementById('btn-login').addEventListener('click', async () => {
-    if (!validateLogin()) return;
+    if (!validateLoginForm()) return;
 
-    const login = document.getElementById('login-email').value.trim();
-    const password = document.getElementById('login-pass').value;
+    const login = document.getElementById('login').value.trim();
+    const password = document.getElementById('password').value;
 
     const loginData = {
       login: login,
@@ -320,11 +321,12 @@ width: 586px; height: 452px; background: white; box-shadow: 0 0 20px rgba(0,0,0,
     }
   });
 
-  //  Обробка кліку по кнопці "Продовжити"
+  // Кнопка "Продовжити" — перехід на реєстрацію
   document.getElementById('btn-continue').addEventListener('click', () => {
     window.location.href = 'https://localhost:7035/Реєстрація.html';
   });
 </script>
+
 
 
   
