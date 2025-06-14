@@ -351,22 +351,6 @@ function showMessage(message, type) {
     }, 5000);
 }
 
-async function fetchWithAuth(url, options = {}) {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-        alert('Токен не знайдено. Будь ласка, увійдіть у систему.');
-        window.location.href = ''; //...ТУТ НА ГЛАВНУЮ
-        return;
-    }
-
-    const headers = options.headers || {};
-    headers['Authorization'] = `Bearer ${token}`;
-    options.headers = headers;
-
-    const response = await fetch(url, options);
-    return response;
-}
-
 // Додавання подій для валідації під час введення
 ['login', 'phone', 'email', 'pass', 'confirm-pass'].forEach(id => 
     document.getElementById(id).addEventListener('input', checkInputs)
@@ -381,9 +365,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const userData = {
             login: document.getElementById('login').value.trim(),
-            phone: document.getElementById('phone').value.trim(),
             email: document.getElementById('email').value.trim(),
-            password: document.getElementById('pass').value
+            password: document.getElementById('pass').value,
+            phone: document.getElementById('phone').value.trim()
         };
 
         try {
@@ -395,22 +379,36 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify(userData)
             });
 
-            if (response.ok) {
-                const data = await response.json();
+            const text = await response.text();     
+            let data;
+            try {
+                data = JSON.parse(text);          
+            } catch {
+                data = {};                        
+            }
 
-                // Збереження токена
-                const token = data.token;
-                if (token) {
-                    localStorage.setItem('authToken', token);
-                    showMessage("Ви успішно зареєструвалися! Токен збережено.", "success");
-                } else {
-                    showMessage("Реєстрація успішна, але токен не отримано.", "error");
-                }
+            if (response.ok) {
+                const { login, email, phone } = data;
+
+                showMessage(
+                    `Реєстрація успішна! \nЛогін: ${login}\nEmail: ${email}\nТелефон: ${phone}\n\n Ми надіслали лист для підтвердження пошти. Перевірте свою пошту зараз і перейдіть за посиланням для активації акаунту.`,
+                    "success");
             } else {
-                const data = await response.json();
-                showMessage(data.message || 'Невідома помилка', "error");
+                if (data.errors) {
+                    const messages = Object.values(data.errors)
+                        .flat()
+                        .join('\n');
+                    showMessage(messages, "error");
+                } else if (data.message) {
+                    showMessage(data.message, "error");
+                } else if (data.error) {
+                    showMessage(data.error, "error");
+                } else {
+                    showMessage('Сталася помилка при реєстрації.', "error");
+                }
             }
         } catch (error) {
+            console.error("Network or JSON error:", error);
             showMessage('Не вдалося з’єднатись із сервером', "error");
         }
     });
@@ -419,9 +417,10 @@ document.addEventListener("DOMContentLoaded", () => {
 function showMessage(message, type) {
     const modal = document.getElementById("modal");
     const messageBox = document.getElementById("modal-message");
+    const formattedMessage = message.replace(/\n/g, '<br>');
     const modalContent = `
         <div class="${type === "success" ? "success-message" : "error-message"}">
-            ${message}
+            ${formattedMessage}
         </div>
         <button onclick="closeModal()">Закрити</button>
     `;

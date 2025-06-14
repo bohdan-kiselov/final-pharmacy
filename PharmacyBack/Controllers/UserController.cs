@@ -62,12 +62,12 @@ namespace PharmacyBack.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UsersRequest request)
+        public async Task<IActionResult> Login([FromBody] PharmacyBack.Contracts.LoginRequest request)
         {
             var (isValid, user) = await _usersService.ValidateUserCredentials(request.Login, request.Password);
 
             if (!isValid)
-                return Unauthorized("Invalid credentials");
+                return Unauthorized(new { message = "Невірний логін або пароль" });
 
             var token = _jwtService.Generate(user!);
 

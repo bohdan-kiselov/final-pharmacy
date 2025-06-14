@@ -305,16 +305,13 @@ width: 586px; height: 452px; background: white; box-shadow: 0 0 20px rgba(0,0,0,
         const data = await response.json();
         const token = data.token;
 
-        if (token) {
-          localStorage.setItem('authToken', token);
-          alert('Вхід успішний!');
-          window.location.href = 'https://localhost:7035/Головна.html';
-        } else {
-          alert('Вхід успішний, але токен не отримано.');
-        }
+        localStorage.setItem('authToken', token);
+        alert('Вхід успішний!');
+        window.location.href = 'https://localhost:7035/Головна.html';    
+
       } else {
-        const errorData = await response.json();
-        alert(errorData.message || 'Помилка авторизації');
+          const errorText = await response.text();
+          alert(errorText || 'Помилка авторизації');
       }
     } catch (error) {
       alert('Не вдалося з’єднатись із сервером');
