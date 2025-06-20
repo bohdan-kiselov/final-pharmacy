@@ -77,20 +77,12 @@ namespace Pharmacy.Application.Services
             string updatedLogin = existingUser.Login;
             if (!string.IsNullOrWhiteSpace(newLogin))
             {
-                if (await _userRepository.FindLogin(newLogin))
-                {
-                    return (null, "Логін вже зайнятий.");
-                }
                 updatedLogin = newLogin;
             }
 
             string updatedEmail = existingUser.Email;
             if (!string.IsNullOrWhiteSpace(newEmail))
-            {
-                if (await _userRepository.FindEmail(newEmail))
-                {
-                    return (null, "Електронна пошта вже зайнята.");
-                }
+            { 
                 await _userRepository.SwitchIsVerified(existingUser.Id);
 
                 await _emailVerificationService.SendVerificationToken(existingUser.Id, newEmail);
@@ -100,10 +92,6 @@ namespace Pharmacy.Application.Services
             string updatedPhone = existingUser.PhoneNumber;
             if (!string.IsNullOrWhiteSpace(newPhone))
             {
-                if (await _userRepository.FindPhone(newPhone))
-                {
-                    return (null, "Номер телефону вже зайнятий.");
-                }
                 updatedPhone = newPhone;
             }
 

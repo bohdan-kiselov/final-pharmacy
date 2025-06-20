@@ -254,133 +254,187 @@
   </div>
 
   <script>
-    const overlay = document.getElementById('overlay');
+      const overlay = document.getElementById('overlay');
 
-    function showPopup(popupId) {
-      document.getElementById(popupId).style.display = 'block';
-      overlay.style.display = 'block';
-    }
-
-    function hidePopups() {
-      document.getElementById('password-popup').style.display = 'none';
-      document.getElementById('email-popup').style.display = 'none';
-      overlay.style.display = 'none';
-    }
-
-    function checkInputs() {
-      const login = document.getElementById('login').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      const email = document.getElementById('email').value.trim();
-
-      let valid = true;
-
-      if (login.length < 3 || login.length > 16) {
-        showError('error-login', 'Логін має містити від 3 до 16 символів');
-        valid = false;
-      } else {
-        showError('error-login', '');
+      function showPopup(popupId) {
+          document.getElementById(popupId).style.display = 'block';
+          overlay.style.display = 'block';
       }
 
-      if (!/^\+380\d{9}$/.test(phone)) {
-        showError('error-phone', 'Номер має починатися з +380 і містити 13 символів');
-        valid = false;
-      } else {
-        showError('error-phone', '');
+      function hidePopups() {
+          document.getElementById('password-popup').style.display = 'none';
+          document.getElementById('email-popup').style.display = 'none';
+          overlay.style.display = 'none';
       }
 
-      if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email)) {
-        showError('error-email', 'Введіть дійсну адресу Gmail');
-        valid = false;
-      } else {
-        showError('error-email', '');
+      function showError(id, message) {
+          document.getElementById(id).textContent = message;
       }
 
-      if (login === phone || login === email || phone === email) {
-        showError('error-login', 'Логін, телефон і пошта не повинні повторюватись');
-        valid = false;
+      function checkInputs() {
+          const login = document.getElementById('login').value.trim();
+          const phone = document.getElementById('phone').value.trim();
+          const email = document.getElementById('email').value.trim();
+
+          let valid = true;
+
+          if (login.length < 3 || login.length > 16) {
+              showError('error-login', 'Логін має містити від 3 до 16 символів');
+              valid = false;
+          } else {
+              showError('error-login', '');
+          }
+
+          if (!/^\+380\d{9}$/.test(phone)) {
+              showError('error-phone', 'Номер має починатися з +380 і містити 13 символів');
+              valid = false;
+          } else {
+              showError('error-phone', '');
+          }
+
+          if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email)) {
+              showError('error-email', 'Введіть дійсну адресу Gmail');
+              valid = false;
+          } else {
+              showError('error-email', '');
+          }
+
+          if (login === phone || login === email || phone === email) {
+              showError('error-login', 'Логін, телефон і пошта не повинні повторюватись');
+              valid = false;
+          }
+
+          const btn = document.getElementById('btn-register');
+          btn.disabled = !valid;
+          btn.style.cursor = valid ? 'pointer' : 'not-allowed';
       }
 
-      const btn = document.getElementById('btn-register');
-      btn.disabled = !valid;
-      btn.style.cursor = valid ? 'pointer' : 'not-allowed';
-    }
+      function validatePasswords() {
+          const newPass = document.getElementById('new-pass').value;
+          const confirmPass = document.getElementById('confirm-pass').value;
+          const error = document.getElementById('pass-error');
+          const btn = document.getElementById('btn-save-pass');
 
-    function showError(id, message) {
-      document.getElementById(id).textContent = message;
-    }
+          if (newPass.length < 6) {
+              error.textContent = 'Пароль має бути не менше 6 символів';
+              btn.disabled = true;
+              btn.style.cursor = 'not-allowed';
+              return;
+          }
 
-    ['login', 'phone', 'email'].forEach(id =>
-      document.getElementById(id).addEventListener('input', checkInputs)
-    );
+          if (newPass !== confirmPass) {
+              error.textContent = 'Паролі не співпадають';
+              btn.disabled = true;
+              btn.style.cursor = 'not-allowed';
+              return;
+          }
 
-    document.getElementById('btn-password').addEventListener('click', () => showPopup('password-popup'));
-    document.getElementById('btn-email-edit').addEventListener('click', () => showPopup('email-popup'));
-    overlay.addEventListener('click', hidePopups);
-
-    function validatePasswords() {
-      const newPass = document.getElementById('new-pass').value;
-      const confirmPass = document.getElementById('confirm-pass').value;
-      const error = document.getElementById('pass-error');
-      const btn = document.getElementById('btn-save-pass');
-
-      if (newPass.length < 6) {
-        error.textContent = 'Пароль має бути не менше 6 символів';
-        btn.disabled = true;
-        btn.style.cursor = 'not-allowed';
-        return;
+          error.textContent = '';
+          btn.disabled = false;
+          btn.style.cursor = 'pointer';
       }
 
-      if (newPass !== confirmPass) {
-        error.textContent = 'Паролі не співпадають';
-        btn.disabled = true;
-        btn.style.cursor = 'not-allowed';
-        return;
+      function validateEmailInput() {
+          const emailInput = document.getElementById('new-email').value.trim();
+          const error = document.getElementById('email-error');
+          const btn = document.getElementById('btn-save-email');
+
+          if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(emailInput)) {
+              error.textContent = 'Введіть дійсну адресу Gmail';
+              btn.disabled = true;
+              btn.style.cursor = 'not-allowed';
+              return;
+          }
+
+          error.textContent = '';
+          btn.disabled = false;
+          btn.style.cursor = 'pointer';
       }
 
-      error.textContent = '';
-      btn.disabled = false;
-      btn.style.cursor = 'pointer';
-    }
+      // Заповнення полів при завантаженні сторінки
+      async function fetchProfile() {
+          try {
+              const response = await fetch('https://localhost:7035/api/User/profile', {
+                  method: 'GET',
+                  headers: {
+                      'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
+                  }
+              });
 
-    function validateEmailInput() {
-      const emailInput = document.getElementById('new-email').value.trim();
-      const error = document.getElementById('email-error');
-      const btn = document.getElementById('btn-save-email');
+              if (!response.ok) throw new Error('Помилка завантаження профілю');
+              const data = await response.json();
 
-      if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(emailInput)) {
-        error.textContent = 'Введіть дійсну адресу Gmail';
-        btn.disabled = true;
-        btn.style.cursor = 'not-allowed';
-        return;
+              document.getElementById('login').value = data.login;
+              document.getElementById('email').value = data.email;
+              document.getElementById('phone').value = data.phone;
+
+              checkInputs();
+          } catch (error) {
+              alert(error.message);
+          }
       }
 
-      error.textContent = '';
-      btn.disabled = false;
-      btn.style.cursor = 'pointer';
-    }
+      // Збереження профілю (PATCH)
+      document.getElementById('btn-register').addEventListener('click', async () => {
+          const login = document.getElementById('login').value.trim();
+          const phone = document.getElementById('phone').value.trim();
+          const email = document.getElementById('email').value.trim();
+          const password = document.getElementById('password')?.value.trim() ?? "";
 
-    ['new-pass', 'confirm-pass'].forEach(id =>
-      document.getElementById(id).addEventListener('input', validatePasswords)
-    );
+          const body = { login, phone, email, password };
 
-    document.getElementById('new-email').addEventListener('input', validateEmailInput);
+          try {
+              const response = await fetch('https://localhost:7035/api/User/profile', {
+                  method: 'PATCH',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
+                  },
+                  body: JSON.stringify(body)
+              });
 
-    document.getElementById('btn-save-pass').addEventListener('click', () => {
-      alert('Пароль успішно змінено!');
-      hidePopups();
-    });
+              const result = await response.text();
 
-    document.getElementById('btn-save-email').addEventListener('click', () => {
-      const newEmail = document.getElementById('new-email').value.trim();
-      document.getElementById('email').value = newEmail;
-      checkInputs();
-      hidePopups();
-      alert('Пошта успішно змінена!');
-    });
+              if (!response.ok) {
+                  alert("Помилка: " + result);
+              } else {
+                  alert("Успішно збережено!");
+              }
+          } catch (error) {
+              alert("Помилка з'єднання з сервером");
+          }
+      });
 
-    document.getElementById('btn-register').addEventListener('click', () => {
-      alert('Дані збережено успішно!');
-    });
+      // Події
+      document.getElementById('btn-password').addEventListener('click', () => showPopup('password-popup'));
+      document.getElementById('btn-email-edit').addEventListener('click', () => showPopup('email-popup'));
+      overlay.addEventListener('click', hidePopups);
+
+      ['login', 'phone', 'email'].forEach(id =>
+          document.getElementById(id).addEventListener('input', checkInputs)
+      );
+
+      ['new-pass', 'confirm-pass'].forEach(id =>
+          document.getElementById(id).addEventListener('input', validatePasswords)
+      );
+
+      document.getElementById('new-email').addEventListener('input', validateEmailInput);
+
+      document.getElementById('btn-save-pass').addEventListener('click', () => {
+          alert('Пароль успішно змінено!');
+          hidePopups();
+      });
+
+      document.getElementById('btn-save-email').addEventListener('click', () => {
+          const newEmail = document.getElementById('new-email').value.trim();
+          document.getElementById('email').value = newEmail;
+          checkInputs();
+          hidePopups();
+          alert('Пошта успішно змінена!');
+      });
+
+      // Стартове завантаження профілю
+      window.addEventListener('DOMContentLoaded', fetchProfile);
   </script>
 </body>
 </html>
